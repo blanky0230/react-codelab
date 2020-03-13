@@ -1,29 +1,52 @@
 import React, { useState, useEffect, useImperativeHandle } from "react";
 import axios from "axios";
 import { UserData } from "../App";
+import { render } from "react-dom";
 
+interface Props {
+  userId: number;
+}
 
-export function Profile({userId}: {userId: number}) {
-    const [userdata, setUserData] = useState(null as UserData | null);
+interface State extends UserData { isLoaded: boolean }
 
-    useEffect(() => {
-        axios
+class Profile extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      id: props.userId,
+      first_name: '',
+      last_name:'',
+      email: '',
+      avatar: '',
+      isLoaded: false,
+    }
+  }
+
+  componentDidMount() {
+    async function loadData(userId: number) {
+      return await axios
           .get(`https://reqres.in/api/users/${userId}`)
-          .then(response => setUserData(response.data.data as UserData))
-          .catch(() => null)
-    }, [userId]);
+    }
+    loadData(this.state.id).then(response => this.setState( {... response.data.data as UserData, isLoaded: true }))
+          .catch(() => this.setState({...this.state, isLoaded: false}))
+  }
 
-    if (userdata === null) {
+    render() { 
+    if (!this.state.isLoaded) {
       return (<h1>Loading...</h1>);
     }
+
     return (
       <>
         <div>
-          <h1>{userdata.first_name}</h1>
-          <h2>{userdata.last_name}</h2>
-          <img src={userdata.avatar}></img>
-          <a href={"mailto:" + userdata.email}>{userdata.email}</a>
+          <h1>{this.state.first_name}</h1>
+          <h2>{this.state.last_name}</h2>
+          <img src={this.state.avatar}></img>
+          <a href={"mailto:" + this.state.email}>{this.state.email}</a>
         </div>
       </>
     );
+    }
 }
+
+export default Profile;
