@@ -25,14 +25,12 @@ export function ProfileList({page = 1, perPage = 4}: {page:number, perPage:numbe
     if (userList === null) { 
         return (<h1>Loading...</h1>);
     }
-    const perPageOptions = (new Array<number>(userList.total).fill(0).map( (_, n) => (<option key={n} value={n+1}>{n+1}</option>)));
-    const pageButtons = (new Array<number>(userList.total_pages).fill(0).map( (_, n) => (<button key={n} onClick={() => setCurrentPage(n+1)}>{n+1}</button>)));
 
     return (<>
         <h1>Humanz</h1>
         <h2>Page {userList.page} of {userList.total_pages}</h2>
-        Per page: <select onChange={ (event) => setPerPage(parseInt(event.target.value)) }>{perPageOptions}</select>
-        Current page: {pageButtons}
+        Per page: <select onChange={ (event) => setPerPage(parseInt(event.target.value)) }>{(new Array<number>(userList.total).fill(0).map( (_, n) => (<option key={n} value={n+1}>{n+1}</option>)))}</select>
+        Current page: {(new Array<number>(userList.total_pages).fill(0).map( (_, n) => (<button key={n} onClick={() => setCurrentPage(n+1)}>{n+1}</button>)))}
         <ul>
         {userList.data.map(u => (<li key={u.id}><a href={`/users/${u.id}`}>{u.first_name}<br/><img src={u.avatar}/></a></li>))}
         </ul>
