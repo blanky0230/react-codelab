@@ -47,30 +47,7 @@ class ProfileList extends React.Component<Props, State> {
     if (this.state.data.length < 1) {
       return <h1>Loading...</h1>;
     }
-    const perPageOptions = new Array<number>(this.state.total)
-      .fill(0)
-      .map((_, n) => (
-        <option key={n} value={n + 1}>
-          {n + 1}
-        </option>
-      ));
-    const pageButtons = new Array<number>(this.state.total_pages)
-      .fill(0)
-      .map((_, n) => (
-        <button
-          key={n}
-          onClick={() =>
-            this.fetchData(n + 1, this.state.per_page).then(res =>
-              this.setState(res.data as UserList)
-            )
-          }
-        >
-          {n + 1}
-        </button>
-      ));
-
-    return (
-      <>
+    return (  <>
         <h1>Humanz</h1>
         <h2>
           Page {this.state.page} of {this.state.total_pages}
@@ -84,9 +61,30 @@ class ProfileList extends React.Component<Props, State> {
             ).then(res => this.setState(res.data as UserList))
           }
         >
-          {perPageOptions}
+          {(new Array<number>(this.state.total)
+      .fill(0)
+      .map((_, n) => (
+        <option key={n} value={n + 1}>
+          {n + 1}
+        </option>
+      )))
+}
         </select>
-        Current page: {pageButtons}
+        Current page: {(new Array<number>(this.state.total_pages)
+      .fill(0)
+      .map((_, n) => (
+        <button
+          key={n}
+          onClick={() =>
+            this.fetchData(n + 1, this.state.per_page).then(res =>
+              this.setState(res.data as UserList)
+            )
+          }
+        >
+          {n + 1}
+        </button>
+      )))
+}
         <ul>
           {this.state.data.map(u => (
             <li key={u.id}>
@@ -99,7 +97,7 @@ class ProfileList extends React.Component<Props, State> {
           ))}
         </ul>
       </>
-    );
+    )
   }
 }
 
