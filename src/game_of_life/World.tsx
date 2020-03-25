@@ -125,7 +125,7 @@ export default function World({ width = 40, height = 40 }): React.ReactElement {
     <button onClick={(): void => { setGeneration(generation+1); setCells(update(cells));}}>Iterate</button>
     <button onClick={toggleAuto}>{isAuto ? 'Stop' : 'Start'}</button>
     <button onClick={ (): void => { setGeneration(0); setCells(createEmptyCells(width, height)); setIsAuto(false); setDelay(1) }}>RESET</button>
-    <input type="number" onChange={(event) => setDelay(Number(event.target.value))} value={delay}></input>
+    <label>delay<input type="number" onChange={(event) => setDelay(Number(event.target.value))} value={delay}></input></label>
     </div>
   );
 }
