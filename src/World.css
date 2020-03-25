@@ -1,0 +1,12 @@
+.World {  
+    display: grid;
+    grid-gap: 4px;
+    color: #444;
+    fill: none;
+}
+.LivingCell {
+    background-color: #fff;
+}
+.DeadCell {
+    background-color: #111;
+}
