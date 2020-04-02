@@ -20,12 +20,12 @@ const cellsAsArray = (cellMap: Map<string, CellType>): Array<CellType> => {
 
 const retrieveNeighbours = (cell: CellType, cells: Map<string, CellType>): Array<CellType> => {
     const neighbours = new Array<CellType>();
-    const [boundX, boundY] = cell.pos
-    for (let i = boundX -1; i <= boundX + 1; i++) {
-        for (let j = boundY -1; j <= boundY +1; j++) {
+    const [centerX, centerY] = cell.pos
+    for (let i = centerX -1; i <= centerX + 1; i++) {
+        for (let j = centerY -1; j <= centerY +1; j++) {
             const cursor = JSON.stringify([i, j] as position);
             const neighbour = cells.get(cursor);
-            if(neighbour === cell || neighbour === undefined) {
+            if(neighbour?.pos === cell.pos || neighbour === undefined) {
                 continue;
             }
             neighbours.push(neighbour);
@@ -61,7 +61,7 @@ const update = (cells: Map<string, CellType>): Map<string, CellType> => {
 };
 
 
-function createEmptyCells(
+function createEmptyBoard(
   columns: number,
   rows: number
 ): Map<string, CellType> {
@@ -87,7 +87,7 @@ function useInterval(callback: () => void, delay: number | null): void {
       savedCallback.current();
     }
     if(delay !== null) {
-      let id = setInterval(tick, delay);
+      const id = setInterval(tick, delay);
       return (): void => clearInterval(id);
     }
   });
@@ -95,7 +95,7 @@ function useInterval(callback: () => void, delay: number | null): void {
 
 export default function World({ width = 40, height = 40 }): React.ReactElement {
   const [generation, setGeneration] = useState(0);
-  const [cells, setCells] = useState(createEmptyCells(width, height));
+  const [cells, setCells] = useState(createEmptyBoard(width, height));
   const [isAuto, setIsAuto] = useState(false);
   const [delay, setDelay] = useState(1);
 
@@ -124,7 +124,7 @@ export default function World({ width = 40, height = 40 }): React.ReactElement {
       </div>
     <button onClick={(): void => { setGeneration(generation+1); setCells(update(cells));}}>Iterate</button>
     <button onClick={toggleAuto}>{isAuto ? 'Stop' : 'Start'}</button>
-    <button onClick={ (): void => { setGeneration(0); setCells(createEmptyCells(width, height)); setIsAuto(false); setDelay(1) }}>RESET</button>
+    <button onClick={ (): void => { setGeneration(0); setCells(createEmptyBoard(width, height)); setIsAuto(false); setDelay(1) }}>RESET</button>
     <label>delay<input type="number" onChange={(event) => setDelay(Number(event.target.value))} value={delay}></input></label>
     </div>
   );

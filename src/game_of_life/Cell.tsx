@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useSpring, animated, config} from 'react-spring';
 
 export type position = [number, number];
 
@@ -14,12 +15,12 @@ export default function Cell({
   alive: boolean;
   handler: () => void;
 }): React.ReactElement {
+  const anim = useSpring({
+    backgroundColor: alive ? 'hotpink' : 'black',
+    config: config.stiff,
+
+  });
   return (
-    <>
-      <div
-        className={alive ? "LivingCell" : "DeadCell"}
-        onClick={handler}
-      ></div>
-    </>
+      <animated.div style={anim} onClick={handler}></animated.div>
   );
 }
